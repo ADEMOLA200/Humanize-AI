@@ -21,36 +21,30 @@ type SparqlResponse struct {
 }
 
 func GetSynonym(word string) (string, error) {
-	// SPARQL query to fetch synonyms
 	query := fmt.Sprintf(`SELECT ?synonym WHERE {
 		?s <http://wordnet-rdf.princeton.edu/ontology#word> "%s" .
 		?s <http://wordnet-rdf.princeton.edu/ontology#synonym> ?synonym .
 	}`, word)
 
-	// Encode the query
 	encodedQuery := url.QueryEscape(query)
 	sparqlURL := fmt.Sprintf("http://ldf.fi/wordnet/sparql?query=%s", encodedQuery)
 
-	// Make the request
 	resp, err := http.Get(sparqlURL)
 	if err != nil {
 		return "", err
 	}
 	defer resp.Body.Close()
 
-	// Read the response
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return "", err
 	}
 
-	// Parse the JSON response
 	var result SparqlResponse
 	if err := json.Unmarshal(body, &result); err != nil {
 		return "", err
 	}
 
-	// Extract synonyms
 	if len(result.Results.Bindings) == 0 {
 		return "", fmt.Errorf("no synonyms found for the word")
 	}

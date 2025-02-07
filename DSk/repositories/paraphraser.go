@@ -30,7 +30,7 @@ func ParaphraseText(text string) (string, error) {
 		return "", err
 	}
 
-	// Uncomment the next line to see the raw response for debugging
+	// you can uncomment the next line to see the raw response for debugging from the paraphrase server
 	fmt.Println("Raw Response:", string(body))
 
 	var result ParaphraseResponse

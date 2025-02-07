@@ -20,6 +20,8 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
+// you can uncomment this part if you do not want other rewriting modifications
+// maybe you just want the text coming directly from the t5 model
 // func RewriteText(text string) string {
 //     paraphrased, err := repositories.ParaphraseText(text)
 //     if err == nil && paraphrased != "" {
@@ -28,9 +30,8 @@ func init() {
 //     return text
 // }
 
-// RewriteText uses the paraphrase, then applies light rewriting modifications.
+// RewriteText uses the paraphrase from the t5, then applies light rewriting modifications.
 func RewriteText(text string) string {
-	// First, call the paraphrase endpoint.
 	paraphrased, err := repositories.ParaphraseText(text)
 	if err == nil && paraphrased != "" {
 		text = paraphrased
@@ -77,7 +78,6 @@ func splitSentences(text string) []string {
 }
 
 func varySentenceStructure(sentence string) string {
-	// Lower the probability for converting sentence voice.
 	if rand.Float64() < 0.2 {
 		return convertVoice(sentence)
 	}
@@ -86,7 +86,6 @@ func varySentenceStructure(sentence string) string {
 
 func convertVoice(sentence string) string {
 	words := strings.Fields(sentence)
-	// A basic active/passive conversion example.
 	if len(words) > 2 && strings.Contains(sentence, " by ") {
 		return strings.Replace(sentence, " by ", " ", 1)
 	}
@@ -119,7 +118,6 @@ func replaceSynonyms(sentence string) string {
 	words := strings.Fields(sentence)
 	for i, word := range words {
 		cleanWord := strings.Trim(word, ".,!?;:\"'")
-		// Skip if too short or common.
 		if len(cleanWord) < 5 || isCommonWord(cleanWord) {
 			continue
 		}
