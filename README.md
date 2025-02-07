@@ -40,7 +40,7 @@
 ### 1. Clone the Repository
 
 ```bash
-git clone (https://github.com/ADEMOLA200/Humanize-AI)
+git clone https://github.com/ADEMOLA200/Humanize-AI
 cd undetectable-ai
 ```
 
@@ -67,7 +67,7 @@ cd undetectable-ai
 
 ### 3. Run the Paraphrase Service
 
-From the project root or the `DSk/models` folder (depending on your structure):
+From the `DSk/models`:
 
 ```bash
 python DSk/models/paraphrase_server.py
@@ -115,7 +115,7 @@ The Go service (which uses [Fiber](https://gofiber.io/)) will expose an HTTP end
 
 #### Rewriting Service (Go)
 
-- **Endpoint:** `POST [http://localhost:8080/your_rewrite_endpoint](http://localhost:8080/rewrite)`  
+- **Endpoint:** `POST http://localhost:8080/rewrite`  
   (Check your Fiber route configuration in the Go controllers.)
 
 - **Request Body (JSON):**
