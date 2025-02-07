@@ -40,7 +40,7 @@
 ### 1. Clone the Repository
 
 ```bash
-git clone [https://github.com/yourusername/undetectable-ai.git](https://github.com/ADEMOLA200/Humanize-AI)
+git clone (https://github.com/ADEMOLA200/Humanize-AI)
 cd undetectable-ai
 ```
 
