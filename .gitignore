@@ -1,0 +1,6 @@
+.DS_Store
+.env
+00000
+# .venv
+__pycache__
+sever.c
