@@ -44,11 +44,11 @@ def paraphrase():
     outputs = model.generate(
         inputs.input_ids,
         max_length=768,
-        min_length=200,  # ensures at least 200 tokens are generated
+        min_length=200,
         do_sample=True,
         num_beams=5,
         num_return_sequences=1,
-        temperature=0.7,  # Lower temperature for more controlled output
+        temperature=0.7,
         top_p=0.9,
         top_k=50
     )
