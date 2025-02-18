@@ -1,8 +1,9 @@
-package handler
+package main
 
 import (
 	"log"
 	"net/http"
+	"os"
 	"time"
 	controllers "undetectable-ai/DSk/controller"
 
@@ -16,13 +17,10 @@ import (
 var app *fiber.App
 
 func init() {
-	app = setupApp()
-	log.Println("🚀 Initializing server...")
-}
+	// Initialize Fiber app once
+	app = fiber.New()
 
-func setupApp() *fiber.App {
-	app := fiber.New()
-
+	// Common middleware setup
 	app.Use(limiter.New(limiter.Config{
 		Max:        20,
 		Expiration: 1 * time.Minute,
@@ -33,9 +31,9 @@ func setupApp() *fiber.App {
 
 	allowedOrigins := map[string]bool{
 		"http://127.0.0.1:5500":                   true,
-		"https://humanize-ai-frontend.vercel.app": true, // NODE
-		"https://humanize-ai-one.vercel.app":      true, // GO
-		"https://humanize-ai-server.vercel.app":   true, // PY
+		"https://humanize-ai-frontend.vercel.app": true,
+		"https://humanize-ai-one.vercel.app":      true,
+		"https://humanize-ai-server.vercel.app":   true,
 		"http://localhost:3000":                   true,
 		"http://localhost:8080":                   true,
 	}
@@ -51,14 +49,27 @@ func setupApp() *fiber.App {
 	}))
 
 	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("🚀 Server is running on Vercel!")
+		return c.SendString("🚀 Combined Server is running!")
 	})
 
 	app.Post("/rewrite", controllers.RewriteHandler)
+}
 
-	return app
+func StartServer() error {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3000"
+	}
+	log.Printf("🚀 Server running on port %s", port)
+	return app.Listen(":" + port)
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {
 	bridge.Start(adaptor.FiberApp(app))
+}
+
+func main() {
+	if err := StartServer(); err != nil {
+		log.Fatal(err)
+	}
 }
