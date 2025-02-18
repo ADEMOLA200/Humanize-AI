@@ -1,8 +1,7 @@
 package main
 
 import (
-	"log"
-	"os"
+	"net/http"
 	"time"
 	controllers "undetectable-ai/DSk/controller"
 
@@ -10,7 +9,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
-	"net/http"
 )
 
 func setupApp() *fiber.App {
@@ -52,14 +50,14 @@ func VercelHandler(w http.ResponseWriter, r *http.Request) {
 	adaptor.FiberApp(setupApp())(w, r)
 }
 
-func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
+// I commented this for production sake
+// func main() {
+// 	port := os.Getenv("PORT")
+// 	if port == "" {
+// 		port = "8080"
+// 	}
 
-	log.Printf("🚀 Server running on port %s\n", port)
-
-	http.HandleFunc("/", VercelHandler)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
-}
+// 	log.Printf("🚀 Server running on port %s\n", port)
+// 	http.HandleFunc("/", VercelHandler)
+// 	log.Fatal(http.ListenAndServe(":"+port, nil))
+// }
