@@ -13,6 +13,13 @@ import (
 	"github.com/vercel/go-bridge/go/bridge"
 )
 
+var app *fiber.App
+
+func init() {
+	app = setupApp()
+	log.Println("🚀 Initializing server...")
+}
+
 func setupApp() *fiber.App {
 	app := fiber.New()
 
@@ -26,9 +33,9 @@ func setupApp() *fiber.App {
 
 	allowedOrigins := map[string]bool{
 		"http://127.0.0.1:5500":                   true,
-		"https://humanize-ai-server.vercel.app":   true,
 		"https://humanize-ai-frontend.vercel.app": true,
 		"https://humanize-ai-one.vercel.app":      true,
+		"http://localhost:3000":                   true,
 	}
 
 	app.Use(cors.New(cors.Config{
@@ -51,8 +58,5 @@ func setupApp() *fiber.App {
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {
-	app := setupApp()
-	log.Println("🚀 Running on Vercel...")
-
 	bridge.Start(adaptor.FiberApp(app))
 }
