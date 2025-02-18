@@ -36,6 +36,7 @@ func setupApp() *fiber.App {
 		"https://humanize-ai-frontend.vercel.app": true,
 		"https://humanize-ai-one.vercel.app":      true,
 		"http://localhost:3000":                   true,
+		"http://localhost:8080":                   true,
 	}
 
 	app.Use(cors.New(cors.Config{
