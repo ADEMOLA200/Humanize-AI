@@ -37,6 +37,10 @@ func main() {
 		ExposeHeaders:    "Content-Length",
 	}))
 
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.SendString("🚀 Server is running on Vercel!")
+	})
+
 	app.Post("/rewrite", controllers.RewriteHandler)
 
 	port := os.Getenv("PORT")
