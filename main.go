@@ -43,7 +43,7 @@ func setupApp() *fiber.App {
 		AllowOriginsFunc: func(origin string) bool {
 			return allowedOrigins[origin]
 		},
-		AllowMethods:     "POST, OPTIONS",
+		AllowMethods:     "POST",
 		AllowHeaders:     "Content-Type, x-api-key",
 		AllowCredentials: true,
 		ExposeHeaders:    "Content-Length",
@@ -51,11 +51,6 @@ func setupApp() *fiber.App {
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("🚀 Server is running on Vercel!")
-	})
-
-	app.Options("/rewrite", func(c *fiber.Ctx) error {
-		// Return empty response for OPTIONS requests
-		return c.SendStatus(fiber.StatusNoContent)
 	})
 
 	app.Post("/rewrite", controllers.RewriteHandler)
