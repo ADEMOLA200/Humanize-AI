@@ -52,6 +52,11 @@ func setupApp() *fiber.App {
 		return c.SendString("🚀 Server is running on Vercel!")
 	})
 
+	app.Options("/rewrite", func(c *fiber.Ctx) error {
+		// Return empty response for OPTIONS requests
+		return c.SendStatus(fiber.StatusNoContent)
+	})
+
 	app.Post("/rewrite", controllers.RewriteHandler)
 
 	return app
