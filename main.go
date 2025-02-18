@@ -25,8 +25,9 @@ func setupApp() *fiber.App {
 	}))
 
 	allowedOrigins := map[string]bool{
-		"http://127.0.0.1:5500":                 true,
-		"https://humanize-ai-server.vercel.app": true,
+		"http://127.0.0.1:5500":                   true,
+		"https://humanize-ai-server.vercel.app":   true,
+		"https://humanize-ai-frontend.vercel.app": true,
 	}
 
 	app.Use(cors.New(cors.Config{
