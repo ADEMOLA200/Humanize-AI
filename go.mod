@@ -3,6 +3,7 @@ module undetectable-ai
 go 1.22.9
 
 require (
+	github.com/gofiber/adaptor/v2 v2.2.1
 	github.com/gofiber/fiber/v2 v2.52.6
 	github.com/kljensen/snowball v0.10.0
 	github.com/neurosnap/sentences v1.1.2

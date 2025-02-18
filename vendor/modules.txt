@@ -2,6 +2,9 @@
 ## explicit; go 1.13
 github.com/andybalholm/brotli
 github.com/andybalholm/brotli/matchfinder
+# github.com/gofiber/adaptor/v2 v2.2.1
+## explicit; go 1.17
+github.com/gofiber/adaptor/v2
 # github.com/gofiber/fiber/v2 v2.52.6
 ## explicit; go 1.20
 github.com/gofiber/fiber/v2
@@ -58,6 +61,7 @@ github.com/valyala/bytebufferpool
 # github.com/valyala/fasthttp v1.51.0
 ## explicit; go 1.20
 github.com/valyala/fasthttp
+github.com/valyala/fasthttp/fasthttpadaptor
 github.com/valyala/fasthttp/fasthttputil
 github.com/valyala/fasthttp/reuseport
 github.com/valyala/fasthttp/stackless

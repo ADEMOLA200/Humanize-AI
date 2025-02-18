@@ -2,17 +2,18 @@ package main
 
 import (
 	"log"
-	"net/http"
 	"os"
 	"time"
 	controllers "undetectable-ai/DSk/controller"
 
+	"github.com/gofiber/adaptor/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
+	"net/http"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
+func setupApp() *fiber.App {
 	app := fiber.New()
 
 	app.Use(limiter.New(limiter.Config{
@@ -44,15 +45,14 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	app.Post("/rewrite", controllers.RewriteHandler)
 
-	if err := app.Listen(":8080"); err != nil {
-		log.Fatalf("❌ Server failed to start: %v", err)
-	}
+	return app
+}
+
+func VercelHandler(w http.ResponseWriter, r *http.Request) {
+	adaptor.FiberApp(setupApp())(w, r)
 }
 
 func main() {
-	// Define the HTTP handler
-	http.HandleFunc("/", handler)
-
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
@@ -60,5 +60,6 @@ func main() {
 
 	log.Printf("🚀 Server running on port %s\n", port)
 
+	http.HandleFunc("/", VercelHandler)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
