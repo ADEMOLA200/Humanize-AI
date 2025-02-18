@@ -44,7 +44,7 @@ func setupApp() *fiber.App {
 			return allowedOrigins[origin]
 		},
 		AllowMethods:     "POST",
-		AllowHeaders:     "Content-Type, x-api-key",
+		AllowHeaders:     "Content-Type, X-API-Key",
 		AllowCredentials: true,
 		ExposeHeaders:    "Content-Length",
 	}))
