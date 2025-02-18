@@ -7,10 +7,12 @@ require (
 	github.com/gofiber/fiber/v2 v2.52.6
 	github.com/kljensen/snowball v0.10.0
 	github.com/neurosnap/sentences v1.1.2
+	github.com/vercel/go-bridge v0.0.0-20221108222652-296f4c6bdb6d
 )
 
 require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
+	github.com/aws/aws-lambda-go v1.47.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/klauspost/compress v1.17.9 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
