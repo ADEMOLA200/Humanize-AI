@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"time"
 	controllers "undetectable-ai/DSk/controller"
 
@@ -47,7 +48,7 @@ func setupApp() *fiber.App {
 	return app
 }
 
-func main() {
+func Handler(w http.ResponseWriter, r *http.Request) {
 	app := setupApp()
 	log.Println("🚀 Running on Vercel...")
 
