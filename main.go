@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"os"
 	"time"
 	controllers "undetectable-ai/DSk/controller"
@@ -11,7 +12,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 )
 
-func main() {
+func handler(w http.ResponseWriter, r *http.Request) {
 	app := fiber.New()
 
 	app.Use(limiter.New(limiter.Config{
@@ -43,13 +44,21 @@ func main() {
 
 	app.Post("/rewrite", controllers.RewriteHandler)
 
+	if err := app.Listen(":8080"); err != nil {
+		log.Fatalf("❌ Server failed to start: %v", err)
+	}
+}
+
+func main() {
+	// Define the HTTP handler
+	http.HandleFunc("/", handler)
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 
 	log.Printf("🚀 Server running on port %s\n", port)
-	if err := app.Listen(":" + port); err != nil {
-		log.Fatalf("❌ Server failed to start: %v", err)
-	}
+
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
