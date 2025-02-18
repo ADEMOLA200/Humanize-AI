@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 	"time"
 	controllers "undetectable-ai/DSk/controller"
 
@@ -21,18 +22,30 @@ func main() {
 		},
 	}))
 
+	allowedOrigins := map[string]bool{
+		"http://127.0.0.1:5500":                 true,
+		"https://humanize-ai-server.vercel.app": true,
+	}
+
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "http://127.0.0.1:5500",
+		AllowOriginsFunc: func(origin string) bool {
+			return allowedOrigins[origin]
+		},
 		AllowMethods:     "POST, OPTIONS",
-		AllowHeaders:     "Content-Type",
+		AllowHeaders:     "Content-Type, x-api-key",
 		AllowCredentials: true,
 		ExposeHeaders:    "Content-Length",
 	}))
 
 	app.Post("/rewrite", controllers.RewriteHandler)
 
-	log.Println("Server started at :8080")
-	if err := app.Listen(":8080"); err != nil {
-		log.Fatalf("Server failed: %v", err)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	log.Printf("🚀 Server running on port %s\n", port)
+	if err := app.Listen(":" + port); err != nil {
+		log.Fatalf("❌ Server failed to start: %v", err)
 	}
 }

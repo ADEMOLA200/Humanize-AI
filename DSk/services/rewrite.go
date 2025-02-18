@@ -5,8 +5,8 @@ import (
 	"math/rand"
 	"strings"
 	"time"
-	"unicode"
 	"undetectable-ai/DSk/repositories"
+	"unicode"
 
 	"github.com/neurosnap/sentences"
 )
@@ -14,24 +14,40 @@ import (
 var (
 	englishTraining = sentences.NewStorage()
 	fillerSentences = loadFillers()
+	rnd             = rand.New(rand.NewSource(time.Now().UnixNano()))
 )
 
-func init() {
-	rand.Seed(time.Now().UnixNano())
-}
+// func RewriteText(text string) string {
+// 	t5Paraphrased, err := repositories.ParaphraseText(text)
+// 	if err == nil && t5Paraphrased != "" {
+// 		text = t5Paraphrased
+// 	}
+
+// 	refined, err := repositories.RefineText(text)
+// 	if err == nil && refined != "" {
+// 		text = refined
+// 	}
+
+// 	return text
+// }
 
 // you can uncomment this part if you do not want other rewriting modifications
 // maybe you just want the text coming directly from the t5 model
-// func RewriteText(text string) string {
-//     paraphrased, err := repositories.ParaphraseText(text)
-//     if err == nil && paraphrased != "" {
-//         return paraphrased
-//     }
-//     return text
-// }
+func RewriteText(text string) string {
+	paraphrased, err := repositories.ParaphraseText(text)
+	if err != nil {
+		fmt.Println("Paraphrase error:", err)
+		return text
+	}
+
+	fmt.Println("Paraphrased output:", paraphrased)
+
+	paraphrased = strings.TrimPrefix(paraphrased, ": ")
+	return paraphrased
+}
 
 // RewriteText uses the paraphrase from the t5, then applies light rewriting modifications.
-func RewriteText(text string) string {
+func RewriteTextW(text string) string {
 	paraphrased, err := repositories.ParaphraseText(text)
 	if err == nil && paraphrased != "" {
 		text = paraphrased
@@ -40,27 +56,25 @@ func RewriteText(text string) string {
 	sents := splitSentences(text)
 	var transformed []string
 	for _, sent := range sents {
-		if rand.Float64() < 0.6 {
+		if rnd.Float64() < 0.6 {
 			sent = varySentenceStructure(sent)
 		}
-
-		if rand.Float64() < 0.3 {
+		if rnd.Float64() < 0.3 {
 			sent = replaceSynonyms(sent)
 		}
-		
-		if rand.Float64() < 0.3 {
+		if rnd.Float64() < 0.3 {
 			sent = addNaturalNoise(sent)
 		}
 		transformed = append(transformed, sent)
 	}
 
-	if rand.Float64() < 0.3 {
-		rand.Shuffle(len(transformed), func(i, j int) {
+	if rnd.Float64() < 0.3 {
+		rnd.Shuffle(len(transformed), func(i, j int) {
 			transformed[i], transformed[j] = transformed[j], transformed[i]
 		})
 	}
 
-	if rand.Float64() < 0.3 {
+	if rnd.Float64() < 0.3 {
 		transformed = append(transformed, getContextualFiller(transformed))
 	}
 
@@ -78,7 +92,7 @@ func splitSentences(text string) []string {
 }
 
 func varySentenceStructure(sentence string) string {
-	if rand.Float64() < 0.2 {
+	if rnd.Float64() < 0.2 {
 		return convertVoice(sentence)
 	}
 	return sentence
@@ -121,8 +135,7 @@ func replaceSynonyms(sentence string) string {
 		if len(cleanWord) < 5 || isCommonWord(cleanWord) {
 			continue
 		}
-		// Lower replacement probability.
-		if rand.Float64() < 0.1 {
+		if rnd.Float64() < 0.1 {
 			synonym, err := repositories.GetSynonym(cleanWord)
 			if err == nil && synonym != "" {
 				prefix, suffix := getWordAffixes(word)
@@ -148,13 +161,13 @@ func addNaturalNoise(sentence string) string {
 		" -- ", ", you know, ", " ... ", ", well, ",
 	}
 	for k, v := range replacements {
-		if rand.Float64() < 0.1 && strings.Contains(sentence, k) {
+		if rnd.Float64() < 0.1 && strings.Contains(sentence, k) {
 			sentence = strings.Replace(sentence, k, v, 1)
 		}
 	}
-	if rand.Float64() < 0.1 && len(sentence) > 40 {
-		pause := pauseFormats[rand.Intn(len(pauseFormats))]
-		insertPos := rand.Intn(len(sentence)-20) + 10
+	if rnd.Float64() < 0.1 && len(sentence) > 40 {
+		pause := pauseFormats[rnd.Intn(len(pauseFormats))]
+		insertPos := rnd.Intn(len(sentence)-20) + 10
 		sentence = sentence[:insertPos] + pause + sentence[insertPos:]
 	}
 	return sentence
@@ -173,10 +186,10 @@ func getContextualFiller(sentences []string) string {
 		"This really highlights the importance of %s...",
 	}
 	if len(keywords) > 0 {
-		return fmt.Sprintf(templates[rand.Intn(len(templates))],
+		return fmt.Sprintf(templates[rnd.Intn(len(templates))],
 			strings.Join(keywords[:min(2, len(keywords))], " and "))
 	}
-	return fillerSentences[rand.Intn(len(fillerSentences))]
+	return fillerSentences[rnd.Intn(len(fillerSentences))]
 }
 
 func extractKeywords(sentence string) []string {
